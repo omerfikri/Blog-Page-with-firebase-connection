@@ -1,19 +1,18 @@
 import { ref } from "vue";
 import { db } from "../firebase/config";
-import { collection, getDocs, orderBy } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 const makalelerGetir = () => {
   const makaleler = ref([]);
   const hatalar = ref(null);
 
   const makaleListesiniYukle = async () => {
-    try {
-      const querySnapshot = await getDocs(
+   try {
+      const q = query(
         collection(db, "makaleler"),
         orderBy("olusturulmaTarihi", "desc")
       );
-
-      console.log(querySnapshot.docs);
+      const querySnapshot = await getDocs(q);
 
       makaleler.value = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
